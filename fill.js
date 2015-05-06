@@ -1,9 +1,14 @@
 var setting;
 var loaded = false;
 var settingReady = false;
-response = false;
+var loginErr = false;
+var loginSuc = false;
+
 window.onload = function()
 {
+	loginErr = Boolean(document.getElementsByClassName("alert-danger").length);
+	loginSuc = Boolean(document.getElementsByClassName("alert-success").length);
+	if (loginErr) alert("Opp! Login Failed!");
 	loaded = true;
 	sync();
 }
@@ -13,7 +18,9 @@ var fill = function(){
 	var passField = document.getElementById(setting.passId);
 	var image = document.getElementById(setting.picId);
 	var form = document.getElementById(setting.formId);
-	if (!nameField || !passField || !form || !setting.nameVal || !setting.passVal){
+	var imageInput = document.getElementById(setting.picInputId);
+	if (!nameField || !passField || !form || !imageInput || !setting.nameVal || !setting.passVal){
+		chrome.runtime.sendMessage({setting: false});
 		return;
 	}
 	if (nameField) nameField.value = setting.nameVal;
@@ -24,12 +31,13 @@ var fill = function(){
 		captcha.width = image.naturalWidth;
 		captcha.getContext("2d").drawImage(image, 0, 0);
 		var captchaRes = OCRAD(captcha);
-		document.getElementById(setting.picInputId).value = captchaRes;
+		imageInput.value = captchaRes;
 	}
 	
-	if (form && setting.auto){
+	if (form && setting.auto && !loginErr && !loginSuc){
 		form.submit();
 	}
+	chrome.runtime.sendMessage({setting: true});
 }
 
 var sync = function(){

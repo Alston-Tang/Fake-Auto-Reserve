@@ -12,6 +12,8 @@ window.onload = function()
 }
 
 var save = function(){
+	document.getElementById("saveMessage").innerHTML = "";
+	document.getElementById("fillMessage").innerHTML = "";
 	for (var i = 0; i < fields.length; i++){
 		var fieldId = fields[i];
 		var element = document.getElementById(fieldId);	
@@ -19,7 +21,7 @@ var save = function(){
 	}
 	var autoChecked = document.getElementById("auto").checked;
 	localStorage.setItem("auto", autoChecked);
-	document.getElementById("message").innerHTML = "Success";
+	document.getElementById("saveMessage").innerHTML = "Save: Success";
 }
 
 var load = function(){
@@ -34,7 +36,7 @@ var load = function(){
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
-		console.log(request);
-   		document.getElementById("message").innerHTML = "Fail";
+   		if (request.setting) document.getElementById("fillMessage").innerHTML = "Fill: Success";
+   		else document.getElementById("fillMessage").innerHTML = "Fill: Fail";
 	}
 );
