@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
-	"name": "Hello World",
-	"description": "For CSCI4140",
+	"name": "iReserve",
+	"description": "CSCI4140 Assg3",
 	"version": "1.0",
 
 	"background": {
